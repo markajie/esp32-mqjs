@@ -1,0 +1,11 @@
+# ESP-IDF build outputs
+build/
+sdkconfig.old
+*.log
+
+# Component-manager cache, restored from dependencies.lock
+managed_components/
+
+# Local rollback snapshots and tool state
+backups/
+.dsh/
