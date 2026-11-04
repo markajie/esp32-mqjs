@@ -1,3 +1,7 @@
+# Keep a fresh build (no sdkconfig) on the right chip; `idf.py set-target`
+# remains the explicit way to switch targets.
+CONFIG_IDF_TARGET="esp32c5"
+
 # DIO: QIO at 80 MHz corrupts PSRAM reads on this C5 rev v1.0 board
 # (washed-green framebuffer).
 CONFIG_ESPTOOLPY_FLASHMODE_DIO=y

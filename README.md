@@ -83,6 +83,20 @@ If a bad `user.js` hangs the board, hold **BOOT** while resetting. The firmware
 skips `/spiffs/user.js` for that boot and runs the embedded `main.js`, so the
 recovery page comes back and the bad script can be replaced or deleted.
 
+### First build / clean build
+
+A fresh checkout has no `sdkconfig`. Select the target once, then build:
+
+```powershell
+idf.py set-target esp32c5
+idf.py build
+```
+
+CMake applies `sdkconfig.defaults` plus the tracked board defaults, so the 16MB
+flash size, PSRAM, and `partitions_16MB.csv` are selected without menuconfig. If
+`components/gen_bmgr_codes/` is missing (it is generated, not tracked), run the
+generator from the board README first.
+
 ### Changing main.js offline
 
 If the web page is not running (first boot or recovery), edit `main/js/main.js` and
@@ -94,11 +108,11 @@ idf.py build
 idf.py -p COMx flash monitor
 ```
 
-No C file has to be edited for normal application changes. A full clean or
-reconfigure is not needed. If a change adds a new peripheral, protocol, decoder or
-other native capability, a C module must be added first; JS can then use it.
-
-`idf.py build flash`. The file is embedded with `target_add_binary_data`.
+No C file has to be edited for normal application changes. `main/js/main.js` is
+embedded with `target_add_binary_data`, so `idf.py build flash` is enough. A full
+clean is only needed after changing `sdkconfig` or the partition table. If a change
+adds a new peripheral, protocol, decoder or other native capability, a C module
+must be added first; JS can then use it.
 
 ## JavaScript API
 
@@ -161,13 +175,14 @@ characters fall back to plain magnification at those scales. Regenerate
 
 ### audio (ES8311 + I2S, 24 kHz stereo)
 
-`init()`, `ready()`, `play(samples, stereo?)`, `playOgg(path?)`,
+`init()`, `ready()`, `play(samples, stereo?)`, `playOgg(path)`,
 `tone(freq, ms, volume?)`, `record(ms)`, `setVolume(0..100)`, `mute(on)`
 
 `samples` is an array of signed 16-bit values (mono by default) or a raw PCM string.
-`playOgg` decodes an OGG/Opus file from SPIFFS and plays it at 24 kHz; if the file is
-missing it falls back to the embedded `welcome.ogg`. It returns the elapsed
-milliseconds.
+`playOgg` decodes an OGG/Opus file from SPIFFS and plays it at 24 kHz. The path is
+required and a missing file raises an error; the firmware does not embed an audio
+asset, so upload `/spiffs/welcome.ogg` yourself if you want a startup sound. It
+returns the elapsed milliseconds.
 
 `record(ms)` is blocking, accepts 10..5000 ms, and returns a JS array of averaged
 mono signed 16-bit samples at 24 kHz. For 500 ms that is 12,000 values. The JS heap

@@ -305,13 +305,15 @@ try {
 
   audio.setVolume(60);
   audio.tone(880, 120, 30);
+  // Upload an OGG to /spiffs first; missing files raise an error.
   audio.playOgg("/spiffs/welcome.ogg");
 } catch (audioError) {
   print("audio failed:", audioError);
 }
 ~~~
 
-playOgg 会解码 OGG/Opus；文件不存在时自动播放固件内嵌的 welcome.ogg。
+playOgg 会解码 OGG/Opus；`path` 必填，文件不存在会抛错。固件不再内嵌
+welcome.ogg；需要开机音就自己把 OGG 上传到 `/spiffs/welcome.ogg`。
 
 直接播放 PCM 数组：
 

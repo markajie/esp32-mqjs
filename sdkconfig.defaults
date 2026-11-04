@@ -1,6 +1,7 @@
 # Project-wide settings.  Chip target, flash mode/size, PSRAM and the partition
-# table are declared by the board in main/boards/<board>/sdkconfig.defaults.board
-# and applied afterwards via components/gen_bmgr_codes/board_manager.defaults.
+# table are declared by the board in main/boards/<board>/sdkconfig.defaults.board.
+# CMake passes that file (and the generated board_manager.defaults, when
+# present) through SDKCONFIG_DEFAULTS, so a clean build does not need menuconfig.
 
 CONFIG_FREERTOS_HZ=1000
 CONFIG_ESP_MAIN_TASK_STACK_SIZE=12288

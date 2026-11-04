@@ -266,9 +266,6 @@ static esp_err_t write_pcm(const int16_t *mono, size_t frames, bool stereo)
 #define OGG_CHUNK 512
 #define OGG_OUT_BUF 8192
 
-extern const uint8_t welcome_ogg_start[] asm("_binary_welcome_ogg_start");
-extern const uint8_t welcome_ogg_end[] asm("_binary_welcome_ogg_end");
-
 static bool s_codec_ready;
 
 static esp_err_t codec_ensure(void)
@@ -458,27 +455,19 @@ static JSValue js_play_ogg(JSContext *ctx, JSValue *this_val, int argc, JSValue 
     if (err != ESP_OK)
         return mjs_throw(ctx, "audio init: %s", esp_err_to_name(err));
 
-    uint8_t *data = NULL;
+    if (!path[0])
+        return mjs_throw(ctx, "playOgg: missing path");
+
     size_t len = 0;
-    if (path[0])
-        data = mjs_read_file(path, &len);
-    if (data && len == 0) {
+    uint8_t *data = mjs_read_file(path, &len);
+    if (!data || len == 0) {
         free(data);
-        data = NULL;
-    }
-    bool embedded = false;
-    if (!data) {
-        if (path[0])
-            ESP_LOGW(TAG, "%s not found, using built-in welcome.ogg", path);
-        data = (uint8_t *)welcome_ogg_start;
-        len = (size_t)(welcome_ogg_end - welcome_ogg_start);
-        embedded = true;
+        return mjs_throw(ctx, "%s not found", path);
     }
 
     int64_t start = esp_timer_get_time();
     err = play_ogg_data(data, len);
-    if (!embedded)
-        free(data);
+    free(data);
     if (err != ESP_OK)
         return mjs_throw(ctx, "ogg playback: %s", esp_err_to_name(err));
     return JS_NewInt32(ctx, (int)((esp_timer_get_time() - start) / 1000));

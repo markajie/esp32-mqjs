@@ -36,9 +36,16 @@ firmware/
 ```powershell
 $env:IDF_TOOLS_PATH='D:\Espressif'
 . 'D:\esp\v6.1\esp-idf\export.ps1'
+
+# 全新环境（没有 sdkconfig）先选一次目标；之后直接 idf.py build
+idf.py set-target esp32c5
 idf.py build
 idf.py -p COM3 flash
 ```
+
+`set-target` 会删除旧的 `sdkconfig`。CMake 会自动应用 `sdkconfig.defaults`
+和 `main/boards/movecall/moji2-esp32c5/sdkconfig.defaults.board`，所以
+16MB flash、`partitions_16MB.csv` 和 PSRAM 不需要再手动 menuconfig。
 
 直接烧录 `firmware/` 里的已验证固件：
 
@@ -51,10 +58,15 @@ python -m esptool --chip esp32c5 -p COM3 -b 460800 write_flash '@flash_args'
 
 ## IDF 6.1 兼容说明
 
-`components/gen_bmgr_codes/` 由 esp_board_manager 生成。IDF 6.1 删除了 RMT
-配置里的 `io_loop_back` 和 `io_od_mode` 字段，本仓库已从
-`gen_board_periph_config.c` 移除这两行。若重新生成后编译报这两个字段，
-删掉它们，或升级 esp_board_manager。
+`components/gen_bmgr_codes/` 由 esp_board_manager 生成，并且被 git 忽略；
+全新克隆后要先按板级 README 运行生成脚本，否则会缺生成的头文件和源文件。
+
+IDF 6.1 删除了 RMT 配置里的 `io_loop_back` 和 `io_od_mode` 字段。当前
+esp_board_manager 0.6.2 的 idf6 模板已经不再生成它们；如果重新生成后仍报
+这两个字段，说明用了旧的模板，删掉这两行或升级 esp_board_manager。
+
+本版本删除了内嵌测试音 `welcome.ogg`。`audio.playOgg(path)` 现在必须传
+文件路径，文件不存在会抛错；需要开机音时自己把 OGG 上传到 `/spiffs/`。
 
 ## 对外发布前
 
