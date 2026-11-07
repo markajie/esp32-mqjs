@@ -1,0 +1,14 @@
+# Board-level defaults, applied automatically through SDKCONFIG_DEFAULTS.
+CONFIG_IDF_TARGET="esp32s3"
+
+# This board ships with 16 MB flash.  If yours has 8 MB, change this line and
+# the sizes in partitions.csv accordingly.
+CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y
+CONFIG_PARTITION_TABLE_CUSTOM=y
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="main/boards/zhengchen/1.54tft-wifi/partitions.csv"
+
+# ESP32-S3-WROOM-1 N16R8-class modules carry 8 MB octal PSRAM.  The shared
+# runtime puts the 512 KB JS heap and the framebuffer there.
+CONFIG_SPIRAM=y
+CONFIG_SPIRAM_MODE_OCT=y
+CONFIG_SPIRAM_SPEED_80M=y

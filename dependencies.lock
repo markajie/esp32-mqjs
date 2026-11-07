@@ -1,14 +1,4 @@
 dependencies:
-  espressif/cmake_utilities:
-    component_hash: 351350613ceafba240b761b4ea991e0f231ac7a9f59a9ee901f751bddc0bb18f
-    dependencies:
-    - name: idf
-      require: private
-      version: '>=4.1'
-    source:
-      registry_url: https://components.espressif.com
-      type: service
-    version: 0.5.3
   espressif/esp_audio_codec:
     component_hash: a5b9275af74247e3ce536d16a7080e4d77207a185b63e1bea368eb4d57176c2b
     dependencies:
@@ -85,30 +75,6 @@ dependencies:
       registry_url: https://components.espressif.com
       type: service
     version: 0.5.3~1
-  espressif/esp_codec_dev:
-    component_hash: 4779f31a3ba3f9b38aee1afe6ccb9ba8f6108dc3a6e77d39d7d714e9a215371b
-    dependencies:
-    - name: idf
-      require: private
-      version: '>=4.0'
-    source:
-      registry_url: https://components.espressif.com
-      type: service
-    version: 1.6.2
-  espressif/esp_lcd_st77916:
-    component_hash: c0a565af3ea85a9d9f1e79b0e4d0829378db319bc4dab4939eca44361b3c5a1b
-    dependencies:
-    - name: espressif/cmake_utilities
-      registry_url: https://components.espressif.com
-      require: private
-      version: 0.*
-    - name: idf
-      require: private
-      version: '>=5.4'
-    source:
-      registry_url: https://components.espressif.com/
-      type: service
-    version: 2.0.2
   espressif/esp_websocket_client:
     component_hash: dc00233af846f3a744ada283a300e0d586040aadc3ee67361645ecdce4523672
     dependencies:
@@ -119,16 +85,6 @@ dependencies:
       registry_url: https://components.espressif.com/
       type: service
     version: 1.8.0
-  espressif/led_strip:
-    component_hash: 027f68f2b57b0dca1d68dff6cc1139d9093825aa808c2bc3ca42bb2ce530fce9
-    dependencies:
-    - name: idf
-      require: private
-      version: '>=5.2'
-    source:
-      registry_url: https://components.espressif.com/
-      type: service
-    version: 3.1.1
   espressif/mqtt:
     component_hash: fb18bc3b65aa8c94693a9811ffc322cca8a65d92d5ec84983d3e385080e3969c
     dependencies:
@@ -146,11 +102,9 @@ dependencies:
 direct_dependencies:
 - espressif/esp_audio_codec
 - espressif/esp_board_manager
-- espressif/esp_lcd_st77916
 - espressif/esp_websocket_client
-- espressif/led_strip
 - espressif/mqtt
 - idf
-manifest_hash: 6bea34ea86933848aa3321e02da1262d08f7be4f01fd062e11340085b5f7c956
-target: esp32c5
+manifest_hash: 980ea61aae08a3c66ebcf8d3695b74fa937f91b256e82524094128c16b3aeec0
+target: esp32s3
 version: 3.0.0

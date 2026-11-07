@@ -6,16 +6,12 @@
 CMakeLists.txt
 README.md
 PACKAGING.md
-sdkconfig
 sdkconfig.defaults
-partitions_16MB.csv
 dependencies.lock
 main/
 components/
-mquickjs/
 tools/
 docs/
-firmware/
 ```
 
 ## 不要打包的内容
@@ -37,15 +33,15 @@ firmware/
 $env:IDF_TOOLS_PATH='D:\Espressif'
 . 'D:\esp\v6.1\esp-idf\export.ps1'
 
-# 全新环境（没有 sdkconfig）先选一次目标；之后直接 idf.py build
-idf.py set-target esp32c5
-idf.py build
-idf.py -p COM3 flash
+# 选板子并编译/烧录；每块板子用独立 build 目录和独立 sdkconfig
+idf.py -DBOARD=movecall/moji2-esp32c5 -B build/c5 build
+idf.py -DBOARD=movecall/moji2-esp32c5 -B build/c5 -p COM3 flash
 ```
 
-`set-target` 会删除旧的 `sdkconfig`。CMake 会自动应用 `sdkconfig.defaults`
-和 `main/boards/movecall/moji2-esp32c5/sdkconfig.defaults.board`，所以
-16MB flash、`partitions_16MB.csv` 和 PSRAM 不需要再手动 menuconfig。
+芯片目标、flash 大小、分区表和 PSRAM 都由板子自己的
+`main/boards/<vendor>/<board>/sdkconfig.defaults.board` 提供（分区表文件也
+放在该板目录里），不需要 `set-target`，也不需要手动 menuconfig。sdkconfig
+按板子存成 `sdkconfig.<vendor>_<board>`，切换板子不会串配置。
 
 直接烧录 `firmware/` 里的已验证固件：
 
@@ -58,8 +54,9 @@ python -m esptool --chip esp32c5 -p COM3 -b 460800 write_flash '@flash_args'
 
 ## IDF 6.1 兼容说明
 
-`components/gen_bmgr_codes/` 由 esp_board_manager 生成，并且被 git 忽略；
-全新克隆后要先按板级 README 运行生成脚本，否则会缺生成的头文件和源文件。
+`components/gen_bmgr_codes/` 由 esp_board_manager 根据所选板子的 YAML 生成，
+被 git 忽略。CMake 会在板子或 YAML 变化时自动重新生成；全新克隆后第一次
+`idf.py ... build` 需要先下载托管组件，因此会停下并提示再执行一次。
 
 IDF 6.1 删除了 RMT 配置里的 `io_loop_back` 和 `io_od_mode` 字段。当前
 esp_board_manager 0.6.2 的 idf6 模板已经不再生成它们；如果重新生成后仍报

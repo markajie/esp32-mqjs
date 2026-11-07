@@ -18,7 +18,7 @@ var AP_URL = "http://192.168.4.1";
 var WEB_PORT = 80;
 var RETRY_MS = 5000;
 
-/* Timer slots in components/mjs_engine/mjs_engine.c (MJS_MAX_TIMERS). */
+/* Timer slots in components/mquickjs/mqjs_engine/mjs_engine.c (MJS_MAX_TIMERS). */
 var TIMER_SLOTS = 32;
 
 var displayOK = false;

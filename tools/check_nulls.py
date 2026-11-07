@@ -1,6 +1,6 @@
 
 import re
-h=open('components/mjs_engine/generated/mqjs_stdlib.h',encoding='utf-8').read()
+h=open('components/mquickjs/mqjs_headers/mqjs_stdlib.h',encoding='utf-8').read()
 # map offsets
 m=re.search(r'/\* atom_table \*/(.*?)/\* sorted atom table',h,re.S)
 off={}

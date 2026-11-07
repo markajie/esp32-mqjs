@@ -1,0 +1,22 @@
+version: 1.0.0
+peripherals:
+  - name: spi_display
+    type: spi
+    role: master
+    config:
+      spi_bus_config:
+        spi_port: 2            # SPI3_HOST
+        mosi_io_num: 41
+        miso_io_num: -1
+        sclk_io_num: 42
+        max_transfer_sz: 115200
+
+  - name: ledc_backlight
+    type: ledc
+    role: none
+    config:
+      gpio_num: 20
+      freq_hz: 5000
+      duty: 0
+      duty_resolution: LEDC_TIMER_10_BIT
+      output_invert: false

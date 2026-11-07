@@ -1,0 +1,4 @@
+board: zhengchen_154tft_wifi
+chip: esp32s3
+description: "ZhengChen 1.54 inch TFT WiFi board (240x240 ST7789)"
+manufacturer: "ZhengChen"

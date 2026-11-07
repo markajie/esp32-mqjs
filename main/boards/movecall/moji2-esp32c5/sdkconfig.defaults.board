@@ -1,14 +1,15 @@
-# Keep a fresh build (no sdkconfig) on the right chip; `idf.py set-target`
-# remains the explicit way to switch targets.
+# Movecall Moji 2: ESP32-C5, 16 MB flash, quad PSRAM.  CMake applies this file
+# through SDKCONFIG_DEFAULTS, so a fresh build needs no set-target/menuconfig.
 CONFIG_IDF_TARGET="esp32c5"
 
 # DIO: QIO at 80 MHz corrupts PSRAM reads on this C5 rev v1.0 board
 # (washed-green framebuffer).
 CONFIG_ESPTOOLPY_FLASHMODE_DIO=y
 CONFIG_ESPTOOLPY_FLASHFREQ_80M=y
+CONFIG_SPI_FLASH_FREQ_LIMIT_C5_240MHZ=y
 CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y
 CONFIG_PARTITION_TABLE_CUSTOM=y
-CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="partitions_16MB.csv"
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="main/boards/movecall/moji2-esp32c5/partitions_16MB.csv"
 CONFIG_SPIRAM=y
 CONFIG_SPIRAM_MODE_QUAD=y
 CONFIG_SPIRAM_SPEED_80M=y

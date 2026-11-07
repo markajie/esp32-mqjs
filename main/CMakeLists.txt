@@ -1,8 +1,8 @@
 idf_component_register(
-    SRCS "main.c" "boards/board.c"
+    SRCS "main.c"
     INCLUDE_DIRS "." "boards"
     REQUIRES
-        mjs_engine
+        mqjs_engine
         mjs_module_system
         mjs_module_fs
         mjs_driver_gpio
@@ -16,7 +16,9 @@ idf_component_register(
         mjs_module_mqtt
         mjs_module_ws
         nvs_flash
-        esp_board_manager
 )
 
+# Board code (board.c, setup_device.c) is deliberately not listed here: the
+# generated board component compiles the selected board directory, so board
+# sources never enter a shared component.
 target_add_binary_data(${COMPONENT_LIB} "${CMAKE_CURRENT_SOURCE_DIR}/js/main.js" TEXT)

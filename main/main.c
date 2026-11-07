@@ -54,8 +54,10 @@ void app_main(void)
         return;
     }
 
-    /* Shared I2C bus: touch, codec, and user devices.  Failure is not fatal. */
-    mjs_i2c_init(b->i2c_sda, b->i2c_scl, 100000);
+    /* Shared I2C bus: touch, codec, and user devices.  Boards without a bus
+     * report GPIO_NUM_NC, and sharing GPIO_NUM_NC is not a valid pin mask. */
+    if (b->i2c_sda >= 0 && b->i2c_scl >= 0)
+        mjs_i2c_init(b->i2c_sda, b->i2c_scl, 100000);
 
     JSContext *ctx = mjs_engine_ctx();
     mjs_module_system_init(ctx);

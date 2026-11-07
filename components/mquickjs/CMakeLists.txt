@@ -9,7 +9,7 @@ idf_component_register(
     PRIV_INCLUDE_DIRS
         "./mquickjs"
     PRIV_REQUIRES
-        mjs_headers
+        mqjs_headers
 )
 
 target_compile_options(${COMPONENT_LIB} PRIVATE
